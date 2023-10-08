@@ -14,12 +14,20 @@ const Loader = (Component) => (props) => (
   </Suspense>
 );
 
+const UserProfile = Loader(
+  lazy(() => import("src/content/applications/Users/profile"))
+);
+
 const AdminOptions = Loader(
   lazy(() => import("src/content/applications/Tasks/settings/AdminOptions"))
 );
 
 const CreateTask = Loader(
   lazy(() => import("src/content/applications/Tasks/settings/CreateTask"))
+);
+
+const DetailsTasks = Loader(
+  lazy(() => import("src/content/applications/Tasks/details/DetailsTask"))
 );
 
 const ListTasks = Loader(
@@ -73,6 +81,19 @@ const routes: RouteObject[] = [
         element: <Status404 />,
       },
       {
+        path: "users",
+        children: [
+          {
+            path: "",
+            element: <HomeTask />,
+          },
+          {
+            path: "profile",
+            element: <UserProfile />,
+          },
+        ],
+      },
+      {
         path: "tasks",
         children: [
           {
@@ -82,6 +103,10 @@ const routes: RouteObject[] = [
           {
             path: "create-task",
             element: <CreateTask />,
+          },
+          {
+            path: "details-task/:taskId",
+            element: <DetailsTasks />,
           },
           {
             path: "list-task",

@@ -5,12 +5,13 @@ import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import { Box } from "@mui/material";
+import { Box, useTheme } from "@mui/material";
 import { Dayjs } from "dayjs";
 import { DatePicker, DatePickerProps } from "@mui/x-date-pickers";
 import { useTaskService } from "src/services/tasks-service";
 import { Task, TaskStatus } from "src/models/task";
 import SuspenseLoader from "src/components/SuspenseLoader";
+import CoverCreateTask from "./CoverCreateTask";
 
 const Alert = forwardRef<HTMLDivElement, AlertProps>(
   function Alert(props, ref) {
@@ -31,6 +32,7 @@ let newTask: Task = {
 };
 
 const CreateTask = ({ data }) => {
+  const theme = useTheme();
   const { createTask } = useTaskService();
   const [task, setTask] = useState<Task>();
   const [expireDate, setExpireDate] = useState<DatePickerProps<Dayjs> | null>(
@@ -39,6 +41,9 @@ const CreateTask = ({ data }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [openInformartion, setOpenInformartion] = useState(false);
   const [openError, setOpenError] = useState(false);
+
+  const logoImage =
+    "/static/images/logo/logo-footer-" + theme.palette.mode + ".svg";
 
   const handleChange = (event: { target: { value: any } }) => {
     task.description = event.target.value;
@@ -88,9 +93,10 @@ const CreateTask = ({ data }) => {
       let data = String(Math.floor(Date.now() / 1000) + 3600);
       task.endDate = BigInt(data);
       console.log("task.endDate: ", task.endDate);
+
       await createTask(task);
+
       setOpenInformartion(true);
-      // TODO quando receber que criou a task trocar de pagina
     } catch (error) {
       console.log("Erro: ", error);
       setOpenError(true);
@@ -168,19 +174,13 @@ const CreateTask = ({ data }) => {
         flexDirection={"column"}
       >
         <Box width={"100%"}>
-          <img
-            src="/static/images/task/create-task-cover.png"
-            alt="CreateTaskCover"
-            width={"100%"}
-            height={"100%"}
-          />
+          <CoverCreateTask />
         </Box>
         {loading ? (
           <SuspenseLoader />
         ) : (
           <Box marginTop={2}>
             <Stack spacing={2} alignItems={"center"}>
-              {/* TODO: HOVER COM LINHA FICANDO PRETA */}
               <TextField
                 fullWidth
                 id="outlined-required"
@@ -196,7 +196,7 @@ const CreateTask = ({ data }) => {
                 onBlur={handleAuthorizedRoles}
                 placeholder={"The authorized roles to perform the task"}
               />
-              {/* TODO Cannot convert adm to a BigInt SyntaxError: Cannot convert adm to a BigInt */}
+
               <TextField
                 fullWidth
                 id="outlined-required"
@@ -242,14 +242,13 @@ const CreateTask = ({ data }) => {
               >
                 <Box>
                   <img
-                    src="/static/images/logo/pod3labs-logo.png"
+                    src={logoImage}
                     width={"100px"}
                     height={"100px"}
                     alt="Pod3LabsRecompensaIcon"
                   />
                 </Box>
                 <TextField label={"Reward in USD"} onBlur={handleReward} />
-                {/* deixando data passada */}
                 <DatePicker
                   label={"Deliver Date"}
                   onChange={(newValue: any) => setExpireDate(newValue)}

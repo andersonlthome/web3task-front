@@ -2,7 +2,7 @@ import { Web3TaskContract } from "src/contracts/Web3Task";
 import { TasksManager } from "./contracts/TasksManager";
 import contractAddress from "src/contracts/contract-Web3Task-address.json";
 import { ethers } from "ethers";
-import { chain, createClient, defaultChains } from 'wagmi'
+import { chain, createClient, defaultChains, useAccount } from 'wagmi'
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
 
 const alchemyId = process.env.ALCHEMY_API_KEY as string
@@ -49,7 +49,8 @@ if (window.ethereum == null) {
   signer = provider.getSigner();
 }
 
-export const contract = new ethers.Contract(
+
+export const web3TaskContract = new ethers.Contract(
   contractAddress.Web3Task,
   Web3TaskContract.abi,
   signer
