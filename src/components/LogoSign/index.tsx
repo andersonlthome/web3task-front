@@ -1,7 +1,4 @@
-import {
-  styled,
-  useTheme,
-} from "@mui/material";
+import { styled, useTheme } from "@mui/material";
 import { Link } from "react-router-dom";
 
 const LogoWrapper = styled(Link)(
@@ -19,9 +16,9 @@ function Logo({ logoImage }) {
   const theme = useTheme();
 
   return (
-    <LogoWrapper to="/overview">
+    <LogoWrapper to="/">
       <img
-        style={{ width: '100%', height: '100%' }}
+        style={{ width: "100%", height: "100%" }}
         src={logoImage}
         alt="Logo"
       />
